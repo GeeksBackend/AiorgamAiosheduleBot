@@ -6,7 +6,8 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from dotenv import load_dotenv
 import logging
 import os
-
+import asyncio
+import aioschedule
 
 load_dotenv('.env')
 
@@ -96,8 +97,22 @@ async def send_enroll(message:types.Message, state:FSMContext):
     await message.answer('Спасибо ваши данные успешно записаны')
     await state.finish()
 
+async def send_message():
+    await bot.send_message(-964627083, "Здраствуйте, у вас сегодя урок в 20:00")
+
+async def scheduler():
+    # aioschedule.every().day.at("12:00").do(send_message)
+    # aioschedule.every(0.1).seconds.do(send_message)
+    aioschedule.every().wednesday.at('21:08').do(send_message)
+    while True:
+        await aioschedule.run_pending()
+        await asyncio.sleep(1)
+
+async def on_startup(_):
+    asyncio.create_task(scheduler())
+
 @dp.message_handler()
 async def nothing(message:types.Message):
     await message.answer('')
     
-executor.start_polling(dp)
+executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
