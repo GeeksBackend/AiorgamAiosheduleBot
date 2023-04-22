@@ -8,4 +8,6 @@ quotes = soup.find_all('a', class_='newslink')
 n = 0
 for news in quotes:
     n += 1
-    print(f"{n}) {news.text}\n")
+    # print(f"{n}) {news.text}\n")
+    with open('news.txt', 'a+', encoding='utf-8') as aki:
+        aki.write(f"{n}) {news.text}\n")

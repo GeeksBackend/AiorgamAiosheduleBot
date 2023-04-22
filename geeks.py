@@ -102,7 +102,7 @@ async def send_message():
 
 async def scheduler():
     # aioschedule.every().day.at("12:00").do(send_message)
-    # aioschedule.every(0.1).seconds.do(send_message)
+    # aioschedule.every(0.01).seconds.do(send_message)
     aioschedule.every().wednesday.at('21:08').do(send_message)
     while True:
         await aioschedule.run_pending()
